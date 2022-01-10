@@ -2,6 +2,7 @@
 
 # OBS-VirtualCam
 obs-virutalcam is a plugin for obs-studio , transforming the output video to a virtual directshow device.
+Modify to autostart on the filter plugin
 
 **Supported Platforms** : Windows 7 , Windows 8 and Windows 10
 
@@ -32,13 +33,13 @@ regsvr32 /u "C:\Program Files\obs-studio\bin\32bit\obs-virtualsource.dll"
 # Register specific number of virtual cameras
 Unregister then register 2 directshow camera (up to 4)
 ```
-regsvr32 /u "C:\Program Files\obs-studio\bin\64bit\obs-virtualsource.dll" 
+regsvr32 /u "C:\Program Files\obs-studio\bin\64bit\obs-virtualsource.dll"
 regsvr32 /n /i:"2" "C:\Program Files\obs-studio\bin\64bit\obs-virtualsource.dll"
 ```
 
 
 # Build
-You need to install cmake , visual studio 2017 ,and build OBS project first. 
+You need to install cmake , visual studio 2017 ,and build OBS project first.
 Set following Cmake variables:
 - **QTDIR** (path): QT folder
 - **DepsPath** (path): FFmpeg folder in OBS dependencies package
