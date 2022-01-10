@@ -24,8 +24,8 @@ set(virtualsource_HEADERS
 if(WIN32)
 	set(OBS_VIRTUALSOURCE_VERSION_MAJOR 2)
 	set(OBS_VIRTUALSOURCE_VERSION_MINOR 1)
-	set(OBS_VIRTUALSOURCE_VERSION_PATCH 2)
-	set(OBS_VIRTUALSOURCE_VERSION_STRING "2.1.2")
+	set(OBS_VIRTUALSOURCE_VERSION_PATCH 3)
+	set(OBS_VIRTUALSOURCE_VERSION_STRING "2.1.3")
 	configure_file(${CMAKE_CURRENT_SOURCE_DIR}/virtualsource.rc.in ${CMAKE_CURRENT_SOURCE_DIR}/virtualsource.rc)
 endif()
 
@@ -75,5 +75,5 @@ endif()
 
 set_target_properties(obs-virtualsource
 	PROPERTIES
-	VERSION "2.1.2"
+	VERSION "2.1.3"
 	PRODUCTNAME "OBS Virtualcam Plugin")

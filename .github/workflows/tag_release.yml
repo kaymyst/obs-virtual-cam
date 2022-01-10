@@ -128,7 +128,7 @@ jobs:
         shell: bash
         run: |
           FILENAME="obs-virtualcam-${{ env.GIT_TAG }}-Windows"
-          echo "::set-env name=WIN_FILENAME::$FILENAME"
+          echo "WIN_FILENAME=$FILENAME" >> $GITHUB_ENV
       - name: 'Package obs-virtual-cam'
         working-directory: ${{ github.workspace }}/obs-virtual-cam
         run: |
