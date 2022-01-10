@@ -33,9 +33,9 @@ jobs:
         working-directory: ${{ github.workspace }}/obs-studio
         run: |
           git fetch --prune --unshallow
-          echo ::set-env name=OBS_GIT_BRANCH::$(git rev-parse --abbrev-ref HEAD)
-          echo ::set-env name=OBS_GIT_HASH::$(git rev-parse --short HEAD)
-          echo ::set-env name=OBS_GIT_TAG::$(git describe --tags --abbrev=0)
+          echo "OBS_GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
+          echo "OBS_GIT_HASH=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+          echo "OBS_GIT_TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
       - name: 'Checkout last OBS-Studio release (${{ env.OBS_GIT_TAG }})'
         shell: bash
         working-directory: ${{ github.workspace }}/obs-studio
@@ -47,9 +47,9 @@ jobs:
         working-directory: ${{ github.workspace }}/obs-virtual-cam
         run: |
           git fetch --prune --unshallow
-          echo ::set-env name=GIT_BRANCH::${{ github.event.pull_request.head.ref }}
-          echo ::set-env name=GIT_HASH::$(git rev-parse --short HEAD)
-          echo ::set-env name=GIT_TAG::$(git describe --tags --abbrev=0)
+          echo "GIT_BRANCH=${{ github.event.pull_request.head.ref }}" >> $GITHUB_ENV
+          echo "GIT_HASH=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+          echo "GIT_TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
       - name: 'Install prerequisite: QT'
         run: |
           curl -kLO https://cdn-fastly.obsproject.com/downloads/Qt_${{ env.QT_VERSION }}.7z -f --retry 5 -C -
@@ -115,7 +115,7 @@ jobs:
         run: |
           mkdir .\build32
           cd .\build32
-          cmake -G "${{ env.CMAKE_GENERATOR }}" -A Win32 -DCMAKE_SYSTEM_VERSION="${{ env.CMAKE_SYSTEM_VERSION }}" -DQTDIR="${{ github.workspace }}\cmbuild\QT\${{ env.QT_VERSION }}\msvc2017" -DDepsPath="${{ github.workspace }}\cmbuild\deps\win32" -DLibObs_DIR="${{ github.workspace }}\obs-studio\build32\libobs" -DLIBOBS_INCLUDE_DIR="${{ github.workspace }}\obs-studio\libobs" -DLIBOBS_LIB="${{ github.workspace }}\obs-studio\build32\libobs\RelWithDebInfo\obs.lib" -DOBS_FRONTEND_LIB="${{ github.workspace }}\obs-studio\build32\UI\obs-frontend-api\RelWithDebInfo\obs-frontend-api.lib" -DPTHREAD_LIB="${{ github.workspace }}\obs-studio\build32\deps\w32-pthreads\RelWithDebInfo\w32-pthreads.lib"  ..     
+          cmake -G "${{ env.CMAKE_GENERATOR }}" -A Win32 -DCMAKE_SYSTEM_VERSION="${{ env.CMAKE_SYSTEM_VERSION }}" -DQTDIR="${{ github.workspace }}\cmbuild\QT\${{ env.QT_VERSION }}\msvc2017" -DDepsPath="${{ github.workspace }}\cmbuild\deps\win32" -DLibObs_DIR="${{ github.workspace }}\obs-studio\build32\libobs" -DLIBOBS_INCLUDE_DIR="${{ github.workspace }}\obs-studio\libobs" -DLIBOBS_LIB="${{ github.workspace }}\obs-studio\build32\libobs\RelWithDebInfo\obs.lib" -DOBS_FRONTEND_LIB="${{ github.workspace }}\obs-studio\build32\UI\obs-frontend-api\RelWithDebInfo\obs-frontend-api.lib" -DPTHREAD_LIB="${{ github.workspace }}\obs-studio\build32\deps\w32-pthreads\RelWithDebInfo\w32-pthreads.lib"  ..
       - name: 'Build obs-virtual-cam 64-bit'
         working-directory: ${{ github.workspace }}/obs-virtual-cam
         run: msbuild /m /p:Configuration=RelWithDebInfo .\build64\obs-virtualcam.sln
@@ -126,7 +126,8 @@ jobs:
         shell: bash
         run: |
           FILENAME="OBS-Virtualcam-${{ env.GIT_TAG }}-Windows"
-          echo "::set-env name=WIN_FILENAME::$FILENAME"
+          echo "WIN_FILENAME=$FILENAME" >> $GITHUB_ENV
+
       - name: 'Package obs-virtual-cam'
         working-directory: ${{ github.workspace }}/obs-virtual-cam
         run: |
