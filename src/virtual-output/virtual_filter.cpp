@@ -40,19 +40,6 @@ static const char *virtual_filter_get_name(void *unused)
 	return obs_module_text("VirtualCam");
 }
 
-static void frontend_event(enum obs_frontend_event event, void *data)
-{
-	//struct virtual_filter_data *filter = (struct virtual_filter_data*)malloc(sizeof(*data));
-	virtual_filter_data* filter = (virtual_filter_data*)data;
-	switch (event) {
-	case OBS_FRONTEND_EVENT_FINISHED_LOADING:
-		virtual_filter_start(data);
-		break;
-	default:
-		break;
-	}
-}
-
 static void *virtual_filter_create(obs_data_t *settings, obs_source_t *context)
 {
 	virtual_filter_data *data =
@@ -205,6 +192,19 @@ static bool virtual_filter_start(void *data)
 	} else {
 		blog(LOG_WARNING, "starting virtual-filter failed on VirtualCam'%d'",
 			filter->mode + 1);
+	}
+}
+
+static void frontend_event(enum obs_frontend_event event, void *data)
+{
+	//struct virtual_filter_data *filter = (struct virtual_filter_data*)malloc(sizeof(*data));
+	virtual_filter_data* filter = (virtual_filter_data*)data;
+	switch (event) {
+	case OBS_FRONTEND_EVENT_FINISHED_LOADING:
+		virtual_filter_start(data);
+		break;
+	default:
+		break;
 	}
 }
 
