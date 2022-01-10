@@ -40,21 +40,6 @@ static const char *virtual_filter_get_name(void *unused)
 	return obs_module_text("VirtualCam");
 }
 
-static void *virtual_filter_create(obs_data_t *settings, obs_source_t *context)
-{
-	virtual_filter_data *data =
-		(virtual_filter_data *)bzalloc(sizeof(struct virtual_filter_data));
-
-	data->active = false;
-	data->context = context;
-	data->texrender = gs_texrender_create(GS_BGRA, GS_ZS_NONE);
-	obs_source_update(context, settings);
-	UNUSED_PARAMETER(settings);
-
-	obs_frontend_add_event_callback(frontend_event, data);
-	return data;
-}
-
 static void virtual_filter_video(void *param, float seconds)
 {
 	virtual_filter_data* filter = (virtual_filter_data*)param;
@@ -206,6 +191,21 @@ static void frontend_event(enum obs_frontend_event event, void *data)
 	default:
 		break;
 	}
+}
+
+static void *virtual_filter_create(obs_data_t *settings, obs_source_t *context)
+{
+	virtual_filter_data *data =
+		(virtual_filter_data *)bzalloc(sizeof(struct virtual_filter_data));
+
+	data->active = false;
+	data->context = context;
+	data->texrender = gs_texrender_create(GS_BGRA, GS_ZS_NONE);
+	obs_source_update(context, settings);
+	UNUSED_PARAMETER(settings);
+
+	obs_frontend_add_event_callback(frontend_event, data);
+	return data;
 }
 
 static bool virtual_filter_start(obs_properties_t *props, obs_property_t *p,
