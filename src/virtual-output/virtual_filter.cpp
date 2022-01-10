@@ -42,10 +42,11 @@ static const char *virtual_filter_get_name(void *unused)
 
 static void frontend_event(enum obs_frontend_event event, void *data)
 {
-	struct virtual_filter_data *filter = (struct virtual_filter_data*)malloc(sizeof(*data));
+	//struct virtual_filter_data *filter = (struct virtual_filter_data*)malloc(sizeof(*data));
+	virtual_filter_data* filter = (virtual_filter_data*)data;
 	switch (event) {
 	case OBS_FRONTEND_EVENT_FINISHED_LOADING:
-		virtual_filter_start(NULL, NULL, filter);
+		virtual_filter_start(filter);
 		break;
 	default:
 		break;
@@ -165,6 +166,46 @@ static void virtual_filter_render(void* data, gs_effect_t* effect)
 	obs_source_skip_video_filter(filter->context);
 	UNUSED_PARAMETER(effect);
 }
+
+static bool virtual_filter_start(void *data)
+{
+	virtual_filter_data* filter = (virtual_filter_data*)data;
+
+	if (filter->active)
+		return filter->active;
+
+	obs_source_t* target = obs_filter_get_target(filter->context);
+	struct obs_video_info ovi = { 0 };
+	uint32_t base_width, base_height;
+	uint64_t interval;
+
+	obs_get_video_info(&ovi);
+	base_width = obs_source_get_base_width(target);
+	base_height = obs_source_get_base_height(target);
+
+	if (base_width > 0 && base_height > 0) {
+		filter->base_width = max(ovi.base_width, base_width);
+		filter->base_height = max(ovi.base_height, base_height);
+		filter->width = 0;
+		filter->height = 0;
+		interval = (uint64_t)ovi.fps_den * 1000000000ULL / (uint64_t)ovi.fps_num;
+		filter->active = shared_queue_create(&filter->video_queue, filter->mode,
+			AV_PIX_FMT_BGRA, filter->base_width, filter->base_height, interval,
+			filter->delay + 10);
+	} else {
+		blog(LOG_WARNING, "virtual-filter target size error");
+		filter->active = false;
+	}
+
+	if (filter->active) {
+		shared_queue_set_delay(&filter->video_queue, filter->delay);
+		obs_add_tick_callback(virtual_filter_video, data);
+		blog(LOG_INFO, "starting virtual-filter on VirtualCam'%d'",
+			filter->mode + 1);
+	} else {
+		blog(LOG_WARNING, "starting virtual-filter failed on VirtualCam'%d'",
+			filter->mode + 1);
+	}
 
 static bool virtual_filter_start(obs_properties_t *props, obs_property_t *p,
 	void *data)
