@@ -206,6 +206,7 @@ static bool virtual_filter_start(void *data)
 		blog(LOG_WARNING, "starting virtual-filter failed on VirtualCam'%d'",
 			filter->mode + 1);
 	}
+}
 
 static bool virtual_filter_start(obs_properties_t *props, obs_property_t *p,
 	void *data)
