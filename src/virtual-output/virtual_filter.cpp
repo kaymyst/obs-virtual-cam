@@ -46,7 +46,7 @@ static void frontend_event(enum obs_frontend_event event, void *data)
 	virtual_filter_data* filter = (virtual_filter_data*)data;
 	switch (event) {
 	case OBS_FRONTEND_EVENT_FINISHED_LOADING:
-		virtual_filter_start(filter);
+		virtual_filter_start(data);
 		break;
 	default:
 		break;
