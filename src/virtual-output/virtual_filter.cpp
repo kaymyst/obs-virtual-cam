@@ -200,6 +200,7 @@ static bool virtual_filter_start(obs_properties_t *props, obs_property_t *p,
 	if (filter->active) {
 		if (props != NULL)
 		{
+			//we are not in the settings
 			obs_property_t *stop = obs_properties_get(props, S_STOP);
 			obs_property_set_visible(p, false);
 			obs_property_set_visible(stop, true);
