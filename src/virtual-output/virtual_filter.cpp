@@ -2,6 +2,7 @@
 #include <media-io/video-io.h>
 #include <util/platform.h>
 #include "../queue/share_queue_write.h"
+#include <obs-frontend-api.h>
 
 #define S_DELAY             "delay"
 #define S_START             "start"
@@ -41,8 +42,7 @@ static const char *virtual_filter_get_name(void *unused)
 
 static void frontend_event(enum obs_frontend_event event, void *data)
 {
-	struct virtual_filter_data *filter = data;
-
+	struct virtual_filter_data *filter = (struct virtual_filter_data*)malloc(sizeof(*data));
 	switch (event) {
 	case OBS_FRONTEND_EVENT_FINISHED_LOADING:
 		virtual_filter_start(NULL, NULL, filter);
@@ -172,7 +172,7 @@ static bool virtual_filter_start(obs_properties_t *props, obs_property_t *p,
 	virtual_filter_data* filter = (virtual_filter_data*)data;
 
 	if (filter->active)
-		return;
+		return filter->active;
 
 	obs_source_t* target = obs_filter_get_target(filter->context);
 	struct obs_video_info ovi = { 0 };
