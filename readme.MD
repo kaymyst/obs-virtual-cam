@@ -1,6 +1,9 @@
 ![CI Windows Release](https://github.com/Fenrirthviti/obs-virtual-cam/workflows/CI%20Windows%20Release/badge.svg) ![CI Windows On-Push](https://github.com/Fenrirthviti/obs-virtual-cam/workflows/CI%20Windows%20On-Push/badge.svg)
 
+I modified this plugin so that it can auto start when used as a filter
+
 # OBS-VirtualCam
+
 obs-virutalcam is a plugin for obs-studio , transforming the output video to a virtual directshow device.
 Modify to autostart on the filter plugin
 
