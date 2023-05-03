@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 project(obs-virtualsource)
 
-find_package(FFmpeg COMPONENTS swscale REQUIRED)
+find_package(FFmpeg REQUIRED COMPONENTS swscale)
 
 set(virtualsource_SOURCES
 	dllmain.cpp
@@ -31,13 +31,8 @@ endif()
 
 set(DShowPath "../../dshowdeps/include")
 
-if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-	find_library(DShowLib strmbase PATHS "../../dshowdeps/lib/x64" NO_DEFAULT_PATH)
-	find_library(DShowLibD strmbasd PATHS "../../dshowdeps/lib/x64" NO_DEFAULT_PATH)
-else()
-	find_library(DShowLib strmbase PATHS "../../dshowdeps/lib/x86" NO_DEFAULT_PATH)
-	find_library(DShowLibD strmbasd PATHS "../../dshowdeps/lib/x86" NO_DEFAULT_PATH)
-endif()
+find_library(DShowLib strmbase PATHS "../../dshowdeps/lib/x64" NO_DEFAULT_PATH)
+find_library(DShowLibD strmbasd PATHS "../../dshowdeps/lib/x64" NO_DEFAULT_PATH)
 
 add_library(obs-virtualsource MODULE
 	${virtualsource_SOURCES}

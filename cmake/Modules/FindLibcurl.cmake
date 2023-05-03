@@ -13,11 +13,7 @@ if (PKG_CONFIG_FOUND)
 	pkg_check_modules(_CURL QUIET curl libcurl)
 endif()
 
-if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-	set(_lib_suffix 64)
-else()
-	set(_lib_suffix 32)
-endif()
+set(_lib_suffix 64)
 
 find_path(CURL_INCLUDE_DIR
 	NAMES curl/curl.h
