@@ -18,7 +18,7 @@ class VirtualProperties;
 
 class VirtualProperties : public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
     explicit VirtualProperties(QWidget *parent = 0);

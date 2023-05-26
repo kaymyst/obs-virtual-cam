@@ -9,7 +9,11 @@ if (PKG_CONFIG_FOUND)
 	pkg_check_modules(_FREETYPE QUIET freetype2)
 endif()
 
-set(_lib_suffix 64)
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+	set(_lib_suffix 64)
+else()
+	set(_lib_suffix 32)
+endif()
 
 find_path(FREETYPE_INCLUDE_DIR_ft2build
 	NAMES

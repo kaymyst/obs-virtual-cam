@@ -74,7 +74,7 @@ Function VirtualDeviceSelection
 
 	${NSD_CreateDropList} 15u 23u 40u 80u ""
 		Pop $VirtualDeviceNum
-
+  
 		${NSD_CB_AddString} $VirtualDeviceNum "1"
 		${NSD_CB_AddString} $VirtualDeviceNum "2"
 		${NSD_CB_AddString} $VirtualDeviceNum "3"
@@ -82,13 +82,13 @@ Function VirtualDeviceSelection
 		${NSD_CB_SelectString} $VirtualDeviceNum "1"
 
 	nsDialogs::Show
-
+	
 FunctionEnd
 
 Function VirtualDeviceSelectionPageLeave
 
         ${NSD_GetText} $VirtualDeviceNum $Devices
-
+		
 FunctionEnd
 
 Section "obs-virtualcam" Section1
@@ -97,6 +97,10 @@ Section "obs-virtualcam" Section1
 	SetOverwrite on
 	; Set Section Files and Shortcuts
 	SetOutPath "$INSTDIR\data\obs-plugins\obs-virtualoutput\"
+	File "..\build-package\bin\32bit\obs-virtualsource.dll"
+	File "..\build-package\bin\32bit\obs-virtualsource.pdb"
+	File "..\build-package\bin\32bit\avutil-56.dll"
+	File "..\build-package\bin\32bit\swscale-5.dll"
 	SetOutPath "$INSTDIR\data\obs-plugins\obs-virtualoutput\locale\"
 	File /r "..\build-package\data\obs-plugins\obs-virtualoutput\locale\"
 	SetOutPath "$INSTDIR\obs-plugins\64bit\"
@@ -105,7 +109,7 @@ Section "obs-virtualcam" Section1
 	SetOutPath "$INSTDIR\bin\64bit\"
 	File "..\build-package\bin\64bit\obs-virtualsource.dll"
 	File "..\build-package\bin\64bit\obs-virtualsource.pdb"
-
+	
 SectionEnd
 
 Section -FinishSection
@@ -116,7 +120,7 @@ Section -FinishSection
 	WriteUninstaller "$INSTDIR\uninstall_obs-virtualcam.exe"
 	Exec '$WinDir\Sysnative\regsvr32.exe /s /n /i:$Devices $\"$INSTDIR\data\obs-plugins\obs-virtualoutput\obs-virtualsource.dll$\"'
 	Exec '$SYSDIR\regsvr32.exe /s /n /i:$Devices $\"$INSTDIR\bin\64bit\obs-virtualsource.dll$\"'
-
+	
 SectionEnd
 
 ;Uninstall section

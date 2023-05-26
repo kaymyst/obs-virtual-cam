@@ -66,7 +66,7 @@ struct share_queue {
 	queue_header* header = nullptr;
 };
 
-inline const char* get_mapping_name(int mode)
+inline char* get_mapping_name(int mode)
 {
 	switch (mode){
 		case ModeVideo:    return MAPPING_NAMEV;

@@ -14,7 +14,11 @@ if (PKG_CONFIG_FOUND)
 	pkg_check_modules(_SSL QUIET libssl)
 endif()
 
-set(_lib_suffix 64)
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+	set(_lib_suffix 64)
+else()
+	set(_lib_suffix 32)
+endif()
 
 set(_SSL_BASE_HINTS
 		ENV sslPath${_lib_suffix}

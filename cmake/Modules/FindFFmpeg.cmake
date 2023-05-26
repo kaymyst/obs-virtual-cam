@@ -21,7 +21,11 @@
 
 find_package(PkgConfig QUIET)
 
-set(_lib_suffix 64)
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+	set(_lib_suffix 64)
+else()
+	set(_lib_suffix 32)
+endif()
 
 function(find_ffmpeg_library component header)
 	string(TOUPPER "${component}" component_u)

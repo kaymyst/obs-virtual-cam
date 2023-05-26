@@ -13,7 +13,11 @@ if (PKG_CONFIG_FOUND)
 	pkg_check_modules(_VLC QUIET VLC)
 endif()
 
-set(_lib_suffix 64)
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+	set(_lib_suffix 64)
+else()
+	set(_lib_suffix 32)
+endif()
 
 find_path(VLC_INCLUDE_DIR
 	NAMES libvlc.h

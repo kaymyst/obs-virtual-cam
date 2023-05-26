@@ -13,7 +13,11 @@ if (PKG_CONFIG_FOUND)
 	pkg_check_modules(_LIBFDK QUIET fdk-aac)
 endif()
 
-set(_lib_suffix 64)
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+	set(_lib_suffix 64)
+else()
+	set(_lib_suffix 32)
+endif()
 
 find_path(Libfdk_INCLUDE_DIR
 	NAMES fdk-aac/aacenc_lib.h
