@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 project(obs-virtualsource)
 
-find_package(FFmpeg COMPONENTS swscale REQUIRED)
+find_package(FFmpeg REQUIRED COMPONENTS swscale)
 
 set(virtualsource_SOURCES
 	dllmain.cpp
@@ -23,21 +23,16 @@ set(virtualsource_HEADERS
 
 if(WIN32)
 	set(OBS_VIRTUALSOURCE_VERSION_MAJOR 2)
-	set(OBS_VIRTUALSOURCE_VERSION_MINOR 1)
-	set(OBS_VIRTUALSOURCE_VERSION_PATCH 3)
-	set(OBS_VIRTUALSOURCE_VERSION_STRING "2.1.3")
+	set(OBS_VIRTUALSOURCE_VERSION_MINOR 0)
+	set(OBS_VIRTUALSOURCE_VERSION_PATCH 5)
+	set(OBS_VIRTUALSOURCE_VERSION_STRING "2.0.5")
 	configure_file(${CMAKE_CURRENT_SOURCE_DIR}/virtualsource.rc.in ${CMAKE_CURRENT_SOURCE_DIR}/virtualsource.rc)
 endif()
 
 set(DShowPath "../../dshowdeps/include")
 
-if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-	find_library(DShowLib strmbase PATHS "../../dshowdeps/lib/x64" NO_DEFAULT_PATH)
-	find_library(DShowLibD strmbasd PATHS "../../dshowdeps/lib/x64" NO_DEFAULT_PATH)
-else()
-	find_library(DShowLib strmbase PATHS "../../dshowdeps/lib/x86" NO_DEFAULT_PATH)
-	find_library(DShowLibD strmbasd PATHS "../../dshowdeps/lib/x86" NO_DEFAULT_PATH)
-endif()
+find_library(DShowLib strmbase PATHS "../../dshowdeps/lib/x64" NO_DEFAULT_PATH)
+find_library(DShowLibD strmbasd PATHS "../../dshowdeps/lib/x64" NO_DEFAULT_PATH)
 
 add_library(obs-virtualsource MODULE
 	${virtualsource_SOURCES}
@@ -75,5 +70,5 @@ endif()
 
 set_target_properties(obs-virtualsource
 	PROPERTIES
-	VERSION "2.1.3"
+	VERSION "2.0.4"
 	PRODUCTNAME "OBS Virtualcam Plugin")

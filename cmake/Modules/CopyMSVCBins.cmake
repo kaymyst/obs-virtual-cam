@@ -13,11 +13,7 @@ if(NOT COPY_DEPENDENCIES)
 	return()
 endif()
 
-if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-	set(_bin_suffix 64)
-else()
-	set(_bin_suffix 32)
-endif()
+set(_bin_suffix 64)
 
 file(GLOB FFMPEG_BIN_FILES
 	"${FFMPEG_avcodec_INCLUDE_DIR}/../bin/avcodec-*.dll"
@@ -139,28 +135,28 @@ endif()
 
 if (CMAKE_CONFIGURATION_TYPES MATCHES "Debug")
 	file(GLOB QT_DEBUG_BIN_FILES
-		"${Qt5Core_DIR}/../../../bin/Qt5Cored.dll"
-		"${Qt5Core_DIR}/../../../bin/Qt5Guid.dll"
-		"${Qt5Core_DIR}/../../../bin/Qt5Widgetsd.dll"
-		"${Qt5Core_DIR}/../../../bin/libGLESv2d.dll"
-		"${Qt5Core_DIR}/../../../bin/libEGLd.dll")
+		"${Qt6_DIR}/../../../bin/Qt6Cored.dll"
+		"${Qt6_DIR}/../../../bin/Qt6Guid.dll"
+		"${Qt6_DIR}/../../../bin/Qt6Widgetsd.dll"
+		"${Qt6_DIR}/../../../bin/libGLESv2d.dll"
+		"${Qt6_DIR}/../../../bin/libEGLd.dll")
 	file(GLOB QT_DEBUG_PLAT_BIN_FILES
-		"${Qt5Core_DIR}/../../../plugins/platforms/qwindowsd.dll")
+		"${Qt6_DIR}/../../../plugins/platforms/qwindowsd.dll")
 endif()
 
 if (CMAKE_CONFIGURATION_TYPES MATCHES "Rel")
 	file(GLOB QT_BIN_FILES
-		"${Qt5Core_DIR}/../../../bin/Qt5Core.dll"
-		"${Qt5Core_DIR}/../../../bin/Qt5Gui.dll"
-		"${Qt5Core_DIR}/../../../bin/Qt5Widgets.dll"
-		"${Qt5Core_DIR}/../../../bin/libGLESv2.dll"
-		"${Qt5Core_DIR}/../../../bin/libEGL.dll")
+		"${Qt6_DIR}/../../../bin/Qt6Core.dll"
+		"${Qt6_DIR}/../../../bin/Qt6Gui.dll"
+		"${Qt6_DIR}/../../../bin/Qt6Widgets.dll"
+		"${Qt6_DIR}/../../../bin/libGLESv2.dll"
+		"${Qt6_DIR}/../../../bin/libEGL.dll")
 	file(GLOB QT_PLAT_BIN_FILES
-		"${Qt5Core_DIR}/../../../plugins/platforms/qwindows.dll")
+		"${Qt6_DIR}/../../../plugins/platforms/qwindows.dll")
 endif()
 
 file(GLOB QT_ICU_BIN_FILES
-	"${Qt5Core_DIR}/../../../bin/icu*.dll")
+	"${Qt6_DIR}/../../../bin/icu*.dll")
 
 set(ALL_BASE_BIN_FILES
 	${FFMPEG_BIN_FILES}

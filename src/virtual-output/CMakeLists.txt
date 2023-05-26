@@ -1,15 +1,18 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.16)
 project(obs-virtualoutput)
 
-find_package(FFmpeg COMPONENTS avutil avfilter REQUIRED)
+find_package(FFmpeg REQUIRED COMPONENTS avutil avfilter)
 
 set(CMAKE_PREFIX_PATH "${QTDIR}")
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt5Core REQUIRED)
-find_package(Qt5Widgets REQUIRED)
+find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(Qt6 REQUIRED COMPONENTS Widgets)
+qt_standard_project_setup()
 
 set(LIBOBS_INCLUDE_DIR "LIBOBS_INCLUDE-NOTFOUND" CACHE FILEPATH "LIBOBS PATH")
 	if(OBS_FRONTEND_LIB EQUAL "LIBOBS_INCLUDE-NOTFOUND")
@@ -53,9 +56,9 @@ set(virtualoutput_HEADERS
 
 if(WIN32)
 	set(OBS_VIRTUALOUTPUT_VERSION_MAJOR 2)
-	set(OBS_VIRTUALOUTPUT_VERSION_MINOR 1)
-	set(OBS_VIRTUALOUTPUT_VERSION_PATCH 3)
-	set(OBS_VIRTUALOUTPUT_VERSION_STRING "2.1.3")
+	set(OBS_VIRTUALOUTPUT_VERSION_MINOR 0)
+	set(OBS_VIRTUALOUTPUT_VERSION_PATCH 5)
+	set(OBS_VIRTUALOUTPUT_VERSION_STRING "2.0.5")
 	configure_file(${CMAKE_CURRENT_SOURCE_DIR}/virtualoutput.rc.in ${CMAKE_CURRENT_SOURCE_DIR}/virtualoutput.rc)
 endif()
 
@@ -65,18 +68,20 @@ add_library(obs-virtualoutput MODULE
 
 include_directories(
 	"${LIBOBS_INCLUDE_DIR}/../UI/obs-frontend-api"
+	"${LIBOBS_INCLUDE_DIR}/../deps/w32-pthreads"
 	${LIBOBS_INCLUDE_DIR}
 	${FFMPEG_INCLUDE_DIRS}
-	${Qt5Core_INCLUDES}
-	${Qt5Widgets_INCLUDES})
+	${Qt6_INCLUDES}
+	${Qt6Core_INCLUDES}
+	${Qt6Widgets_INCLUDES})
 
 target_link_libraries(obs-virtualoutput
 	${FFMPEG_LIBRARIES}
 	${LIBOBS_LIB}
 	${OBS_FRONTEND_LIB}
 	${PTHREAD_LIB}
-	Qt5::Core
-	Qt5::Widgets)
+	Qt6::Core
+	Qt6::Widgets)
 
 if(MSVC)
 	foreach(t EXE SHARED MODULE)
@@ -88,7 +93,7 @@ if(MSVC)
 	foreach(var CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
       CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_RELWITHDEBINFO)
       if(${var} MATCHES "/MD")
-        string(REGEX REPLACE "/MD" "/MD /d2FH4-" ${var} "${${var}}")
+        string(REGEX REPLACE "/MD" "/MD /Zc:__cplusplus /permissive- /d2FH4-" ${var} "${${var}}")
       endif()
     endforeach()
 endif()

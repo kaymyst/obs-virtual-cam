@@ -8,11 +8,7 @@
 #
 #  RSSDK_INCLUDE_DIR
 
-if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-	set(_RSSDK_lib_dir "x64")
-else()
-	set(_RSSDK_lib_dir "Win32")
-endif()
+set(_RSSDK_lib_dir "x64")
 
 find_path(RSSDK_INCLUDE_DIR
 	NAMES pxcsession.h

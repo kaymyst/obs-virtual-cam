@@ -13,11 +13,7 @@ if (PKG_CONFIG_FOUND)
 	pkg_check_modules(_SPEEXDSP QUIET speexdsp libspeexdsp)
 endif()
 
-if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-	set(_lib_suffix 64)
-else()
-	set(_lib_suffix 32)
-endif()
+set(_lib_suffix 64)
 
 find_path(SPEEXDSP_INCLUDE_DIR
 	NAMES speex/speex_preprocess.h

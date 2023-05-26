@@ -1,10 +1,6 @@
 set(OBS_OUTPUT_DIR "${CMAKE_BINARY_DIR}/rundir")
 
-if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-	set(_lib_suffix 64)
-else()
-	set(_lib_suffix 32)
-endif()
+set(_lib_suffix 64)
 
 if(WIN32 OR APPLE)
 	set(_struct_def FALSE)
@@ -48,13 +44,10 @@ if(NOT UNIX_STRUCTURE)
 	set(OBS_DATA_DESTINATION "data")
 	if(APPLE)
 		set(OBS_EXECUTABLE_DESTINATION "bin")
-		set(OBS_EXECUTABLE32_DESTINATION "bin")
 		set(OBS_EXECUTABLE64_DESTINATION "bin")
 		set(OBS_LIBRARY_DESTINATION "bin")
-		set(OBS_LIBRARY32_DESTINATION "bin")
 		set(OBS_LIBRARY64_DESTINATION "bin")
 		set(OBS_PLUGIN_DESTINATION "obs-plugins")
-		set(OBS_PLUGIN32_DESTINATION "obs-plugins")
 		set(OBS_PLUGIN64_DESTINATION "obs-plugins")
 
 		set(OBS_DATA_PATH "../${OBS_DATA_DESTINATION}")
@@ -62,13 +55,10 @@ if(NOT UNIX_STRUCTURE)
 		set(OBS_RELATIVE_PREFIX "../")
 	else()
 		set(OBS_EXECUTABLE_DESTINATION "bin/${_lib_suffix}bit")
-		set(OBS_EXECUTABLE32_DESTINATION "bin/32bit")
 		set(OBS_EXECUTABLE64_DESTINATION "bin/64bit")
 		set(OBS_LIBRARY_DESTINATION "bin/${_lib_suffix}bit")
-		set(OBS_LIBRARY32_DESTINATION "bin/32bit")
 		set(OBS_LIBRARY64_DESTINATION "bin/64bit")
 		set(OBS_PLUGIN_DESTINATION "obs-plugins/${_lib_suffix}bit")
-		set(OBS_PLUGIN32_DESTINATION "obs-plugins/32bit")
 		set(OBS_PLUGIN64_DESTINATION "obs-plugins/64bit")
 
 		set(OBS_DATA_PATH "../../${OBS_DATA_DESTINATION}")
@@ -84,13 +74,10 @@ else()
 	endif()
 
 	set(OBS_EXECUTABLE_DESTINATION "bin")
-	set(OBS_EXECUTABLE32_DESTINATION "bin32")
 	set(OBS_EXECUTABLE64_DESTINATION "bin64")
 	set(OBS_LIBRARY_DESTINATION "lib${OBS_MULTIARCH_SUFFIX}")
-	set(OBS_LIBRARY32_DESTINATION "lib32")
 	set(OBS_LIBRARY64_DESTINATION "lib64")
 	set(OBS_PLUGIN_DESTINATION "${OBS_LIBRARY_DESTINATION}/obs-plugins")
-	set(OBS_PLUGIN32_DESTINATION "${OBS_LIBRARY32_DESTINATION}/obs-plugins")
 	set(OBS_PLUGIN64_DESTINATION "${OBS_LIBRARY64_DESTINATION}/obs-plugins")
 	set(OBS_DATA_DESTINATION "share/obs")
 	set(OBS_CMAKE_DESTINATION "${OBS_LIBRARY_DESTINATION}/cmake")
@@ -136,11 +123,7 @@ function(obs_install_additional maintarget)
 		set(addfdir "$ENV{obsAdditionalInstallFiles}")
 	endif()
 
-	if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-		set(_lib_suffix 64)
-	else()
-		set(_lib_suffix 32)
-	endif()
+	set(_lib_suffix 64)
 
 	install(DIRECTORY "${addfdir}/misc/"
 		DESTINATION "."
@@ -152,14 +135,6 @@ function(obs_install_additional maintarget)
 		PATTERN ".gitignore" EXCLUDE)
 
 	if(INSTALLER_RUN)
-		install(DIRECTORY "${addfdir}/libs32/"
-			DESTINATION "${OBS_LIBRARY32_DESTINATION}"
-			USE_SOURCE_PERMISSIONS
-			PATTERN ".gitignore" EXCLUDE)
-		install(DIRECTORY "${addfdir}/exec32/"
-			DESTINATION "${OBS_EXECUTABLE32_DESTINATION}"
-			USE_SOURCE_PERMISSIONS
-			PATTERN ".gitignore" EXCLUDE)
 		install(DIRECTORY "${addfdir}/libs64/"
 			DESTINATION "${OBS_LIBRARY64_DESTINATION}"
 			USE_SOURCE_PERMISSIONS
@@ -169,16 +144,6 @@ function(obs_install_additional maintarget)
 			USE_SOURCE_PERMISSIONS
 			PATTERN ".gitignore" EXCLUDE)
 
-		install(DIRECTORY "${addfdir}/libs32d/"
-			DESTINATION "${OBS_LIBRARY32_DESTINATION}"
-			USE_SOURCE_PERMISSIONS
-			CONFIGURATIONS Debug
-			PATTERN ".gitignore" EXCLUDE)
-		install(DIRECTORY "${addfdir}/exec32d/"
-			DESTINATION "${OBS_EXECUTABLE32_DESTINATION}"
-			USE_SOURCE_PERMISSIONS
-			CONFIGURATIONS Debug
-			PATTERN ".gitignore" EXCLUDE)
 		install(DIRECTORY "${addfdir}/libs64d/"
 			DESTINATION "${OBS_LIBRARY64_DESTINATION}"
 			USE_SOURCE_PERMISSIONS
@@ -190,16 +155,6 @@ function(obs_install_additional maintarget)
 			CONFIGURATIONS Debug
 			PATTERN ".gitignore" EXCLUDE)
 
-		install(DIRECTORY "${addfdir}/libs32r/"
-			DESTINATION "${OBS_LIBRARY32_DESTINATION}"
-			USE_SOURCE_PERMISSIONS
-			CONFIGURATIONS Release RelWithDebInfo MinSizeRel
-			PATTERN ".gitignore" EXCLUDE)
-		install(DIRECTORY "${addfdir}/exec32r/"
-			DESTINATION "${OBS_EXECUTABLE32_DESTINATION}"
-			USE_SOURCE_PERMISSIONS
-			CONFIGURATIONS Release RelWithDebInfo MinSizeRel
-			PATTERN ".gitignore" EXCLUDE)
 		install(DIRECTORY "${addfdir}/libs64r/"
 			DESTINATION "${OBS_LIBRARY64_DESTINATION}"
 			USE_SOURCE_PERMISSIONS
@@ -282,7 +237,6 @@ function(export_obs_core target exportname)
 
 	set(CONF_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}")
 	set(CONF_PLUGIN_DEST "${CMAKE_BINARY_DIR}/rundir/${CMAKE_BUILD_TYPE}/obs-plugins/${_lib_suffix}bit")
-	set(CONF_PLUGIN_DEST32 "${CMAKE_BINARY_DIR}/rundir/${CMAKE_BUILD_TYPE}/obs-plugins/32bit")
 	set(CONF_PLUGIN_DEST64 "${CMAKE_BINARY_DIR}/rundir/${CMAKE_BUILD_TYPE}/obs-plugins/64bit")
 	set(CONF_PLUGIN_DATA_DEST "${CMAKE_BINARY_DIR}/rundir/${CMAKE_BUILD_TYPE}/data/obs-plugins")
 	configure_file("${exportname}Config.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/${exportname}Config.cmake" @ONLY)
@@ -290,7 +244,6 @@ function(export_obs_core target exportname)
 	file(RELATIVE_PATH _pdir "${CMAKE_INSTALL_PREFIX}/${OBS_CMAKE_DESTINATION}/${exportname}" "${CMAKE_INSTALL_PREFIX}")
 	set(CONF_INCLUDE_DIRS "\${CMAKE_CURRENT_LIST_DIR}/${_pdir}${OBS_INCLUDE_DESTINATION}")
 	set(CONF_PLUGIN_DEST "\${CMAKE_CURRENT_LIST_DIR}/${_pdir}${OBS_PLUGIN_DESTINATION}")
-	set(CONF_PLUGIN_DEST32 "\${CMAKE_CURRENT_LIST_DIR}/${_pdir}${OBS_PLUGIN32_DESTINATION}")
 	set(CONF_PLUGIN_DEST64 "\${CMAKE_CURRENT_LIST_DIR}/${_pdir}${OBS_PLUGIN64_DESTINATION}")
 	set(CONF_PLUGIN_DATA_DEST "\${CMAKE_CURRENT_LIST_DIR}/${_pdir}${OBS_DATA_DESTINATION}/obs-plugins")
 	configure_file("${exportname}Config.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${exportname}Config.cmake" @ONLY)
@@ -338,11 +291,7 @@ function(install_obs_pdb ttype target)
 		return()
 	endif()
 
-	if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-		set(_bit_suffix "64bit")
-	else()
-		set(_bit_suffix "32bit")
-	endif()
+	set(_bit_suffix "64bit")
 
 	obs_debug_copy_helper(${target} "${CMAKE_CURRENT_BINARY_DIR}/pdbs")
 
@@ -372,10 +321,8 @@ endfunction()
 function(install_obs_core target)
 	if(APPLE)
 		set(_bit_suffix "")
-	elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
-		set(_bit_suffix "64bit/")
 	else()
-		set(_bit_suffix "32bit/")
+		set(_bit_suffix "64bit/")
 	endif()
 
 	if("${ARGV1}" STREQUAL "EXPORT")
@@ -414,10 +361,8 @@ function(install_obs_bin target mode)
 	foreach(bin ${ARGN})
 		if(APPLE)
 			set(_bit_suffix "")
-		elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
-			set(_bit_suffix "64bit/")
 		else()
-			set(_bit_suffix "32bit/")
+			set(_bit_suffix "64bit/")
 		endif()
 
 		if(NOT IS_ABSOLUTE "${bin}")
@@ -450,10 +395,8 @@ endfunction()
 function(install_obs_plugin target)
 	if(APPLE)
 		set(_bit_suffix "")
-	elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
-		set(_bit_suffix "64bit/")
 	else()
-		set(_bit_suffix "32bit/")
+		set(_bit_suffix "64bit/")
 	endif()
 
 	set_target_properties(${target} PROPERTIES

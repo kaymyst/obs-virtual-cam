@@ -1,21 +1,17 @@
 #include "hflip.h"
 
 bool init_flip_filter(FlipContext* ctx,int width, int height, int format)
-{	
+{
 	char args[512];
 	int ret = -1;
 
 	if (ctx->init)
 		return false;
 
-	avfilter_register_all();
-
 	const AVFilter *buffersrc = avfilter_get_by_name("buffer");
 	const AVFilter *buffersink = avfilter_get_by_name("buffersink");
 	AVFilterInOut *outputs = avfilter_inout_alloc();
 	AVFilterInOut *inputs = avfilter_inout_alloc();
-	enum AVPixelFormat pix_fmts[] = { (AVPixelFormat)format, AV_PIX_FMT_NONE };
-	AVBufferSinkParams *buffersink_params;
 
 	ctx->filter_graph = avfilter_graph_alloc();
 	sprintf(args,
@@ -29,11 +25,8 @@ bool init_flip_filter(FlipContext* ctx,int width, int height, int format)
 		return false;
 	}
 
-	buffersink_params = av_buffersink_params_alloc();
-	buffersink_params->pixel_fmts = pix_fmts;
 	ret = avfilter_graph_create_filter(&ctx->buffersink_ctx, buffersink, "out",
-		NULL, buffersink_params, ctx->filter_graph);
-	av_free(buffersink_params);
+		NULL, NULL, ctx->filter_graph);
 
 	if (ret < 0) {
 		avfilter_graph_free(&ctx->filter_graph);
@@ -61,7 +54,7 @@ bool init_flip_filter(FlipContext* ctx,int width, int height, int format)
 	ctx->frame_out = av_frame_alloc();
 	ctx->frame_buffer_out = (unsigned char *)av_malloc(
 		av_image_get_buffer_size((AVPixelFormat)format, width, height, 1));
-	av_image_fill_arrays(ctx->frame_out->data, ctx->frame_out->linesize, 
+	av_image_fill_arrays(ctx->frame_out->data, ctx->frame_out->linesize,
 		ctx->frame_buffer_out,(AVPixelFormat)format, width, height, 1);
 	ctx->frame_in->width = width;
 	ctx->frame_in->height = height;
