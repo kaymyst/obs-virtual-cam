@@ -194,7 +194,7 @@ endif()
 
 set(CMAKE_REQUIRED_QUIET ${CMAKE_REQUIRED_QUIET_SAVE})
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(PThreads DEFAULT_MSG Threads_FOUND)
+find_package_handle_standard_args(Threads DEFAULT_MSG Threads_FOUND)
 
 if(THREADS_FOUND)
   set(THREADS_LIBRARIES "${CMAKE_THREAD_LIBS_INIT}")
